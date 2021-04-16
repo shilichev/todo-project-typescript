@@ -1,0 +1,32 @@
+.box {
+  height: 100px;
+  color: rgb(131, 131, 131);
+  font-size: 20px;
+  display: grid;
+  grid-template-columns: 180px 300px 620px 50px;
+  grid-template-rows: auto;
+  justify-content: space-around;
+  margin-top: 25px;
+  border: 1px solid rgb(195, 195, 195);
+  background-color: rgb(255, 255, 255);
+}
+.item {
+  margin: 10px;
+  height: 25px;
+  color: #000;
+}
+.item b {
+  position: absolute;
+  padding-top: 10px;
+}
+.buttons {
+  display: flex;
+}
+.checkbox {
+  position: absolute;
+  width: 100px;
+}
+button {
+  width: 20px;
+  height: 20px;
+}

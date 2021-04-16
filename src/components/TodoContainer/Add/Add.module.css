@@ -1,0 +1,24 @@
+input {
+  width: 75%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  font-size: 14px;
+  border: solid 1px rgb(170, 170, 170);
+  border-radius: 8px;
+}
+.add button {
+  position: absolute;
+  width: 6%;
+  padding: 12px 20px;
+  margin: 8px 0 0 235px;
+  color: aliceblue;
+  background-color: rgb(113, 127, 255);
+  border: solid 1px rgb(113, 127, 255);
+  border-radius: 8px;
+  font-size: 13px;
+}
+.add {
+  position: relative;
+  padding-bottom: 50px;
+}
