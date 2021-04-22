@@ -1,0 +1,22 @@
+.total button {
+  width: 6%;
+  padding: 12px 20px;
+  margin: 0 0 0 20px;
+  color: aliceblue;
+  background-color: rgb(113, 127, 255);
+  border: solid 1px rgb(113, 127, 255);
+  border-radius: 8px;
+  font-size: 13px;
+}
+.total :hover {
+  cursor: pointer;
+}
+.total :active {
+  background-color: rgb(223, 226, 255);
+  border: solid 1px rgb(219, 222, 255);
+}
+.total {
+  position: relative;
+  padding-bottom: 50px;
+  font-size: 23px;
+}

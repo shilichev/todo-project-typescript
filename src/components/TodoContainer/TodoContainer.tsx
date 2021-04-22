@@ -1,56 +1,64 @@
 import classes from "./TodoContainer.module.css";
 import Add from "./Add/Add";
 import Todo from "./Todo/Todo";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 
-import dataSlice from "../../store/container_todos/slice";
-import {
-  setTodoThunkCreate,
-  addTodoThunkCreate,
-  deleteTodoThunkCreate,
-} from "../../store/container_todos/thunk";
+import objectSlice from "../../store/container_todos/slice";
+import { setTodoThunkCreate } from "../../store/container_todos/thunk";
+import Total from "./Total/Total";
 
 
-const TodoContainer = (props: any) => {
-  let todos: any[] = props.data.getData();
+interface IPropsDispatch {
+  setTodo: () => void;
+}
+interface IPropsDispatchToState {
+  data: any;
+}
+const TodoContainer = ({
+  setTodo,
+  data,
+}: IPropsDispatch & IPropsDispatchToState) => {
+  const [todos, setTodos] = useState([]);
+  const [filter, setFilter] = useState("");
+  // let todos: any[] = data.getData();
 
   useEffect(() => {
-    props.setTodo();
-  }, []);
+    setTodo();
+  }, [setTodo]);
 
-  const addNewTodo = (id: string) => {
-    props.addTodo({ id: id, title: "1", description: "1", status: "TODO" });
+  useEffect(() => {
+    setTodos(data.getData(filter));
+  }, [filter, data]);
+
+  const filterData = (params: string) => {
+    setFilter(params);
   };
-  const deleteTodoById = (id: string) => {
-    props.deleteTodo(id);
-  };
+
   return (
     <div className={classes.container}>
-      <Add addTodo={addNewTodo} />
-      {todos.map((todo) => (
+      <Add />
+      <Total filterData={filterData} />
+      {todos.map((todo: any) => (
         <Todo
           key={todo.id}
           title={todo.title}
           id={todo.id}
           status={todo.status}
           description={todo.description}
-          deleteTodo={deleteTodoById}
         />
       ))}
     </div>
   );
 };
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: any): IPropsDispatchToState => {
   return {
-    data: dataSlice.selectors(state),
+    data: objectSlice.selectors(state),
   };
 };
 
-const mapDispatchToProps = (dispatch: any) => ({
-  addTodo: (params: any) => dispatch(addTodoThunkCreate(params)),
+const mapDispatchToProps = (dispatch: any): IPropsDispatch => ({
   setTodo: () => dispatch(setTodoThunkCreate()),
-  deleteTodo: (params: any) => dispatch(deleteTodoThunkCreate(params)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoContainer);

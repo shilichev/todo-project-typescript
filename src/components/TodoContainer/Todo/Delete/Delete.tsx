@@ -1,21 +1,30 @@
 import classes from "../Todo.module.css";
+import { connect } from "react-redux";
+import { deleteTodoThunkCreate } from "../../../../store/container_todos/thunk";
+
 interface Props {
   id: string;
-  deleteTodo: (id: string) => any;
 }
 
-const Delete = ({ id, deleteTodo }: Props) => {
+interface IPropsDispatch {
+  deleteTodo: (arg0: any) => any;
+}
+
+const Delete = ({ id, deleteTodo }: Props & IPropsDispatch) => {
+  const deleteTodoById = (id: string) => {
+    deleteTodo(id);
+  };
   return (
-    <div className={classes.item}>
-      <button
-        onClick={() => {
-          deleteTodo(id);
-        }}
-      >
-        {/* <i className="fas fa-trash-alt" /> */}
-      </button>
-    </div>
+    <div
+      className={classes.delete}
+      onClick={() => {
+        deleteTodoById(id);
+      }}
+    ></div>
   );
 };
 
-export default Delete;
+const mapDispatchToProps = (dispatch: any): IPropsDispatch => ({
+  deleteTodo: (params: any) => dispatch(deleteTodoThunkCreate(params)),
+});
+export default connect(null, mapDispatchToProps)(Delete);

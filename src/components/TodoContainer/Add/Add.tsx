@@ -1,11 +1,43 @@
 import classes from "./Add.module.css";
+import {
+  addTodoThunkCreate,
+  setValueThunkCreate,
+} from "../../../store/container_todos/thunk";
+import { connect } from "react-redux";
 
-interface Props {
-  addTodo: (id: string) => any;
+import objectSlice from "../../../store/container_todos/slice";
+
+interface INewTODO {
+  id: string;
+  title: string;
+  description: string;
+  status: "DONE" | "TODO";
 }
-const Add = ({addTodo}: Props) => {
+interface IPropsDispatchToState {
+  value: any;
+}
+
+interface IPropsDispatch {
+  addTodo: (params: INewTODO) => void;
+  setValue: (params: string) => void;
+}
+
+const Add = ({
+  addTodo,
+  setValue,
+  value,
+}: IPropsDispatch & IPropsDispatchToState) => {
+  const onChangeText = (event: any) => {
+    setValue(event.target.value);
+  };
+
   const addNewTodo = (id: string) => {
-    addTodo(id);
+    addTodo({
+      id: id,
+      title: value.getValue() || "New Title",
+      description: "New Description",
+      status: "TODO",
+    });
   };
 
   const createRandomId = () => {
@@ -15,12 +47,21 @@ const Add = ({addTodo}: Props) => {
 
   return (
     <div className={classes.add}>
-      <input></input>
+      <input value={value.getValue()} onChange={onChangeText}></input>
       <button onClick={createRandomId}>
         <strong>ADD</strong>
       </button>
     </div>
   );
 };
+const mapStateToProps = (state: any): IPropsDispatchToState => {
+  return {
+    value: objectSlice.selectors(state),
+  };
+};
 
-export default Add;
+const mapDispatchToProps = (dispatch: any): IPropsDispatch => ({
+  addTodo: (params: INewTODO) => dispatch(addTodoThunkCreate(params)),
+  setValue: (params: string) => dispatch(setValueThunkCreate(params)),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Add);

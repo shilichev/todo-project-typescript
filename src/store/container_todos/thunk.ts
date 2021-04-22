@@ -2,6 +2,8 @@
 import setTodo from "./slice";
 import addTodo from "./slice";
 import deleteTodo from "./slice";
+import updateTodo from "./slice";
+import setValue from "./slice";
 
 const todoContainer = [
     {
@@ -24,12 +26,28 @@ const todoContainer = [
     },
 ];
 
-export const setTodoThunkCreate = () => (dispatch: any) => {
+interface ITodoObject {
+    id: string, title?: string, description?: string, status?: "TODO" | "DONE",
+}
+
+export const setTodoThunkCreate = () => async (dispatch: any) => {
     dispatch(setTodo.actions.setTodo(todoContainer));
 };
-export const addTodoThunkCreate = (params: any) => (dispatch: any) => {
+export const addTodoThunkCreate = (params: ITodoObject) => (dispatch: any) => {
     dispatch(addTodo.actions.addTodo(params));
 };
-export const deleteTodoThunkCreate = (params: any) => (dispatch: any) => {
+export const deleteTodoThunkCreate = (params: ITodoObject) => (dispatch: any) => {
     dispatch(deleteTodo.actions.deleteTodo(params));
 };
+export const updateTodoThunkCreate = (params: ITodoObject) => (dispatch: any) => {
+    dispatch(updateTodo.actions.updateTodo(params));
+};
+export const setValueThunkCreate = (params: string) => (dispatch: any) => {
+    dispatch(setValue.actions.setValue(params));
+};
+// export const sortTodoThunkCreate = (params: ITodoObject) => (dispatch: any) => {
+
+//     return dispatch(sortTodo.actions.sortTodo(params));
+
+
+// };
