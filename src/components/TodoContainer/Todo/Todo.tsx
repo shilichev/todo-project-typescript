@@ -1,19 +1,21 @@
 import Delete from "./Delete/Delete";
 import classes from "./Todo.module.css";
-import Field from "../common/UpdateField/Field";
 import Status from "./Status/Status";
+import Description from "./Description/Description";
+import { STATUS } from "../../../data/types";
+import Title from "./Title/Title";
 
 interface Props {
   title: string;
   id: string;
   description: string;
-  status: "TODO" | "DONE";
+  status: STATUS;
 }
 const Todo = ({ title, id, description, status }: Props) => (
   <div className={classes.box}>
     <Status id={id} status={status} />
-    <Field field={title} id={id} scale="title" />
-    <Field field={description} id={id} scale="description" />
+    <Title title={title} id={id} />
+    <Description description={description} id={id} />
     <Delete id={id} />
   </div>
 );

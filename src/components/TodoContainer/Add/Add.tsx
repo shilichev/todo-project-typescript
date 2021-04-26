@@ -6,19 +6,14 @@ import {
 import { connect } from "react-redux";
 
 import objectSlice from "../../../store/container_todos/slice";
+import { ITodoObject, STATUS } from "../../../data/types";
 
-interface INewTODO {
-  id: string;
-  title: string;
-  description: string;
-  status: "DONE" | "TODO";
-}
 interface IPropsDispatchToState {
   value: any;
 }
 
 interface IPropsDispatch {
-  addTodo: (params: INewTODO) => void;
+  addTodo: (params: ITodoObject) => void;
   setValue: (params: string) => void;
 }
 
@@ -34,9 +29,9 @@ const Add = ({
   const addNewTodo = (id: string) => {
     addTodo({
       id: id,
-      title: value.getValue() || "New Title",
+      title: value || "New Title",
       description: "New Description",
-      status: "TODO",
+      status: STATUS.TODO,
     });
   };
 
@@ -47,7 +42,7 @@ const Add = ({
 
   return (
     <div className={classes.add}>
-      <input value={value.getValue()} onChange={onChangeText}></input>
+      <input value={value} onChange={onChangeText}></input>
       <button onClick={createRandomId}>
         <strong>ADD</strong>
       </button>
@@ -55,13 +50,15 @@ const Add = ({
   );
 };
 const mapStateToProps = (state: any): IPropsDispatchToState => {
+  const valueSlice = objectSlice.selectors(state)
   return {
-    value: objectSlice.selectors(state),
+    value: valueSlice.getValue(),
   };
 };
 
-const mapDispatchToProps = (dispatch: any): IPropsDispatch => ({
-  addTodo: (params: INewTODO) => dispatch(addTodoThunkCreate(params)),
+const mapDispatchToProps = (dispatch: any): IPropsDispatch => (
+  {
+  addTodo: (params: ITodoObject) => dispatch(addTodoThunkCreate(params)),
   setValue: (params: string) => dispatch(setValueThunkCreate(params)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Add);

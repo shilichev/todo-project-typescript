@@ -1,46 +1,40 @@
 
-
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { assoc, compose, concat, merge, pipe } from "ramda";
-
-
-interface IDataProcedureState {
-    data: any[],
-    value: string
-}
-
-interface ITodoObject {
-    id: string, title: string, description: string, status: "TODO" | "DONE",
-}
+import { IDataProcedureState, ITodoObjectPayload, ITodoObject, FILTER_STATUS } from "../../data/types";
 
 const initialState: IDataProcedureState = {
     data: [],
-    value: ""
-}
-interface ITodoObjectPayload {
-    id?: string, title?: string, description?: string, status?: "TODO" | "DONE"
+    value: "",
+    total: 0,
+    checkbox: FILTER_STATUS.ALL
 }
 
 export const { actions, reducer } = createSlice({
     name: "todos",
     initialState,
     reducers: {
-        setTodo(state: IDataProcedureState, { payload }: any) {
-            return compose(assoc('data', payload))(state)
+        setTodo(state: IDataProcedureState, { payload }: any): IDataProcedureState {
+            return pipe(
+                assoc('data', payload),
+                assoc('total', payload.length)
+            )(state);
         },
 
-        addTodo(state: IDataProcedureState, { payload }: PayloadAction<ITodoObjectPayload>) {
-            // payload = concat([payload], state.data);
+        addTodo(state: IDataProcedureState, { payload }: PayloadAction<ITodoObjectPayload>): IDataProcedureState {
             return pipe(
                 assoc('data', concat([payload], state.data)),
                 assoc('value', ''),
-            )(state)
+                assoc('total', state.total + 1),
+            )(state);
         },
-        deleteTodo(state: IDataProcedureState, { payload }: PayloadAction<ITodoObjectPayload>) {
-            return compose(assoc('data', state.data.filter((item: any) => item.id !== payload)),)(state)
-        },
-        updateTodo(state: IDataProcedureState, { payload }: PayloadAction<ITodoObjectPayload>) {
 
+        deleteTodo(state: IDataProcedureState, { payload }: PayloadAction<ITodoObjectPayload>): IDataProcedureState {
+            return pipe(
+                assoc('data', state.data.filter((item: any) => item.id !== payload)),
+                assoc('total', state.total - 1))(state)
+        },
+        updateTodo(state: IDataProcedureState, { payload }: PayloadAction<ITodoObjectPayload>): IDataProcedureState {
             return compose(
                 assoc('data', state.data.map((item: ITodoObject) => {
                     if (item.id === payload.id) {
@@ -50,8 +44,11 @@ export const { actions, reducer } = createSlice({
                 })),
             )(state)
         },
-        setValue(state: IDataProcedureState, { payload }: any) {
-            state.value = payload
+        setValue(state: IDataProcedureState, { payload }: any): IDataProcedureState {
+            return compose(assoc('value', payload))(state)
+        },
+        changeCheckbox(state: IDataProcedureState, { payload }: PayloadAction<FILTER_STATUS>): IDataProcedureState {
+            return compose(assoc('checkbox', payload))(state)
         }
     },
 });
@@ -59,8 +56,9 @@ export const { actions, reducer } = createSlice({
 export const selectors = (state: any): any => {
     const dataSlice = (): any => state.todos || initialState;
     return {
-        getData: (params: any): any[] => dataSlice().data.filter((item: any) => item.status !== params) || [],
+        getData: (): any[] => dataSlice().data.filter((item: any) => item.status !== dataSlice().checkbox) || [],
         getValue: (): string => dataSlice().value || "",
+        getTotal: (): number => dataSlice().total || 0,
     };
 };
 

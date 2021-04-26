@@ -3,12 +3,11 @@ import { useState } from "react";
 import classes from "../../Todo/Todo.module.css";
 
 interface Props {
-  status: boolean;
   value: string;
   updateField: (params: string) => any;
 }
 
-const UpdateField = ({ status, value, updateField }: Props) => {
+const UpdateDescription = ({ value, updateField }: Props) => {
   const [field, setField] = useState(value);
 
   const handleKeyDown = (e: any) => {
@@ -26,23 +25,11 @@ const UpdateField = ({ status, value, updateField }: Props) => {
   const control = (e: any) => {
     setField(e.target.value);
   };
+
   return (
     <div>
       <label>
-        {status ? (
-          <input
-            type="text"
-            value={field}
-            onChange={control}
-            onKeyDown={handleKeyDown}
-          />
-        ) : (
-          <textarea
-            value={field}
-            onChange={control}
-            onKeyDown={handleKeyDown}
-          />
-        )}
+        <textarea value={field} onChange={control} onKeyDown={handleKeyDown} />
       </label>
       <div className={classes.buttons}>
         <button value="Cancel" onClick={handleKeyDown}>
@@ -58,4 +45,4 @@ const UpdateField = ({ status, value, updateField }: Props) => {
   );
 };
 
-export default UpdateField;
+export default UpdateDescription;

@@ -1,6 +1,7 @@
 import classes from "../Todo.module.css";
 import { updateTodoThunkCreate } from "../../../../store/container_todos/thunk";
 import { connect } from "react-redux";
+import { STATUS } from "../../../../data/types";
 
 interface IPropsDispatch {
   updateTodo: (params: any) => void;
@@ -8,15 +9,15 @@ interface IPropsDispatch {
 
 interface Props {
   id: string;
-  status: "TODO" | "DONE";
+  status: STATUS;
 }
 
 const Status = ({ id, status, updateTodo }: Props & IPropsDispatch) => {
   const toggleCheckboxChange = (e: any) => {
     if (e.target.checked) {
-      updateTodo({ id, status: "DONE" });
+      updateTodo({ id, status: STATUS.DONE });
     } else {
-      updateTodo({ id, status: "TODO" });
+      updateTodo({ id, status: STATUS.TODO });
     }
   };
 
@@ -29,7 +30,6 @@ const Status = ({ id, status, updateTodo }: Props & IPropsDispatch) => {
             checked={status === "DONE"}
             onChange={toggleCheckboxChange}
           />
-
           {status}
         </label>
       </div>

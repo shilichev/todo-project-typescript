@@ -1,39 +1,53 @@
 import { connect } from "react-redux";
-import dataSlice from "../../../store/container_todos/slice";
+import objectSlice from "../../../store/container_todos/slice";
 import classes from "./Total.module.css";
+import { changeCheckboxThunkCreate } from "../../../store/container_todos/thunk";
 
-interface Props {
-  filterData: (params: any) => any;
-}
+// interface Props {
+//   filterData: (params: any) => any;
+// }
+import { FILTER_STATUS } from "../../../data/types";
 
 interface IPropsDispatchToState {
-  data: any;
+  total: number;
+}
+interface IPropsDispatch {
+  changeCheckbox: (params: any) => void;
 }
 
-const Total = ({ data, filterData }: IPropsDispatchToState & Props) => {
-  const sortActiveTodo = (e: any) => {
-    filterData(e.target.value);
+const Total = ({
+  total,
+  changeCheckbox,
+}: IPropsDispatchToState & IPropsDispatch) => {
+  const filterTodo = (e: any) => {
+    changeCheckbox(e.target.value);
   };
 
   return (
     <div className={classes.total}>
-      Total:{data.getData().length}
-      <button value={"TODO"} onClick={sortActiveTodo}>
+      Total:{total}
+      <button value={FILTER_STATUS.DONE} onClick={filterTodo}>{/* pushing value which must filtered */}
         Active
       </button>
-      <button value={"DONE"} onClick={sortActiveTodo}>
-        DONE
+      <button value={FILTER_STATUS.TODO} onClick={filterTodo}>
+        Done
       </button>
-      <button value={"ALL"} onClick={sortActiveTodo}>
+      <button value={FILTER_STATUS.ALL} onClick={filterTodo}>
         ALL
       </button>
     </div>
   );
 };
+
 const mapStateToProps = (state: any): IPropsDispatchToState => {
+  const dataSelector = objectSlice.selectors(state);
   return {
-    data: dataSlice.selectors(state),
+    total: dataSelector.getTotal(),
   };
 };
+const mapDispatchToProps = (dispatch: any): IPropsDispatch => ({
+  changeCheckbox: (params: FILTER_STATUS) =>
+    dispatch(changeCheckboxThunkCreate(params)),
+});
 
-export default connect(mapStateToProps)(Total);
+export default connect(mapStateToProps, mapDispatchToProps)(Total);
