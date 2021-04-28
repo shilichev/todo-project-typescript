@@ -6,8 +6,7 @@ import { IDataProcedureState, ITodoObjectPayload, ITodoObject, FILTER_STATUS } f
 const initialState: IDataProcedureState = {
     data: [],
     value: "",
-    total: 0,
-    checkbox: FILTER_STATUS.ALL
+    checkbox: FILTER_STATUS.ALL,
 }
 
 export const { actions, reducer } = createSlice({
@@ -17,7 +16,6 @@ export const { actions, reducer } = createSlice({
         setTodo(state: IDataProcedureState, { payload }: any): IDataProcedureState {
             return pipe(
                 assoc('data', payload),
-                assoc('total', payload.length)
             )(state);
         },
 
@@ -25,14 +23,12 @@ export const { actions, reducer } = createSlice({
             return pipe(
                 assoc('data', concat([payload], state.data)),
                 assoc('value', ''),
-                assoc('total', state.total + 1),
             )(state);
         },
 
-        deleteTodo(state: IDataProcedureState, { payload }: PayloadAction<ITodoObjectPayload>): IDataProcedureState {
+        deleteTodo(state: IDataProcedureState, { payload }: PayloadAction<string>): IDataProcedureState {       
             return pipe(
-                assoc('data', state.data.filter((item: any) => item.id !== payload)),
-                assoc('total', state.total - 1))(state)
+                assoc('data', state.data.filter((item: any) => item.id !== payload)))(state)
         },
         updateTodo(state: IDataProcedureState, { payload }: PayloadAction<ITodoObjectPayload>): IDataProcedureState {
             return compose(
@@ -58,9 +54,10 @@ export const selectors = (state: any): any => {
     return {
         getData: (): any[] => dataSlice().data.filter((item: any) => item.status !== dataSlice().checkbox) || [],
         getValue: (): string => dataSlice().value || "",
-        getTotal: (): number => dataSlice().total || 0,
+        getTotal: (): number => dataSlice().data.length || 0,
     };
 };
+
 
 const objectSlice = {
     selectors,

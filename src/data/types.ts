@@ -2,7 +2,6 @@ export interface IDataProcedureState {
     data: any[],
     value: string,
     checkbox: FILTER_STATUS,
-    total: number
 }
 export interface ITodoObjectPayload {
     id?: string, title?: string, description?: string, status?: STATUS

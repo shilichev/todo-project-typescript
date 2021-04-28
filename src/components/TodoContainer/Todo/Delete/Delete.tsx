@@ -16,7 +16,7 @@ const Delete = ({ id, deleteTodo }: Props & IPropsDispatch) => {
   };
   return (
     <div
-      className={classes.delete}
+    
       onClick={() => {
         deleteTodoById(id);
       }}

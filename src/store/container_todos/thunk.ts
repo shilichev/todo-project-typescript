@@ -24,13 +24,13 @@ const todoContainer: any = [
 ];
 
 
-export const setTodoThunkCreate = () => async (dispatch: any) => {
+export const setTodoThunkCreate = () => (dispatch: any) => {
     dispatch(objectSlice.actions.setTodo(todoContainer));
 };
 export const addTodoThunkCreate = (params: ITodoObject) => (dispatch: any) => {
     dispatch(objectSlice.actions.addTodo(params));
 };
-export const deleteTodoThunkCreate = (params: ITodoObject) => (dispatch: any) => {
+export const deleteTodoThunkCreate = (params: string) => (dispatch: any) => {
     dispatch(objectSlice.actions.deleteTodo(params));
 };
 export const updateTodoThunkCreate = (params: ITodoObject) => (dispatch: any) => {
@@ -42,10 +42,4 @@ export const setValueThunkCreate = (params: string) => (dispatch: any) => {
 export const changeCheckboxThunkCreate = (params: FILTER_STATUS) => (dispatch: any) => {
     dispatch(objectSlice.actions.changeCheckbox(params));
 };
-
-// export const sortTodoThunkCreate = (params: ITodoObject) => (dispatch: any) => {
-
-//     return dispatch(sortTodo.actions.sortTodo(params));
-
-
-// };
+    
